@@ -1,0 +1,255 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <!-- Header -->
+            <div class="text-center mb-5">
+                <h1 class="display-5 fw-bold mb-3">
+                    <i class="bi bi-info-circle me-3 text-primary"></i>
+                    À propos de DevPlan AI
+                </h1>
+                <p class="lead text-muted">
+                    Découvrez la révolution de la conception de projets grâce à l'intelligence artificielle
+                </p>
+            </div>
+
+            <!-- Mission -->
+            <div class="card mb-5">
+                <div class="card-body p-5 text-center">
+                    <h2 class="h3 mb-4">Notre Mission</h2>
+                    <p class="lead">
+                        Démocratiser la conception de projets full-stack en permettant à chaque développeur, 
+                        entrepreneur ou équipe de créer des architectures professionnelles en quelques minutes 
+                        grâce à l'intelligence artificielle.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Features -->
+            <div class="row g-4 mb-5">
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
+                             style="width: 80px; height: 80px;">
+                            <i class="bi bi-robot" style="font-size: 2rem;"></i>
+                        </div>
+                        <h5>Intelligence Artificielle</h5>
+                        <p class="text-muted">
+                            Alimenté par OpenAI GPT, notre système analyse vos besoins et 
+                            génère des architectures optimales adaptées à votre contexte.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
+                             style="width: 80px; height: 80px;">
+                            <i class="bi bi-lightning-fill" style="font-size: 2rem;"></i>
+                        </div>
+                        <h5>Rapidité</h5>
+                        <p class="text-muted">
+                            Obtenez un schéma complet de votre projet en moins d'une minute. 
+                            Finies les heures passées à réfléchir à l'architecture !
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <div class="bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
+                             style="width: 80px; height: 80px;">
+                            <i class="bi bi-palette-fill" style="font-size: 2rem;"></i>
+                        </div>
+                        <h5>Personnalisation</h5>
+                        <p class="text-muted">
+                            Chaque schéma est unique et adapté à vos préférences technologiques, 
+                            contraintes et objectifs spécifiques.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Technologies -->
+            <div class="card mb-5">
+                <div class="card-header bg-info text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-stack me-2"></i>Technologies Supportées
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-4">
+                        <div class="col-md-3">
+                            <h6 class="text-primary">Frontend</h6>
+                            <ul class="list-unstyled">
+                                <li><i class="bi bi-check-circle text-success me-2"></i>React</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Vue.js</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Angular</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Next.js</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Svelte</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-3">
+                            <h6 class="text-success">Backend</h6>
+                            <ul class="list-unstyled">
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Node.js</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Python</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>PHP</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Java</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>C#</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-3">
+                            <h6 class="text-warning">Bases de données</h6>
+                            <ul class="list-unstyled">
+                                <li><i class="bi bi-check-circle text-success me-2"></i>PostgreSQL</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>MySQL</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>MongoDB</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Redis</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>SQLite</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-3">
+                            <h6 class="text-danger">DevOps</h6>
+                            <ul class="list-unstyled">
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Docker</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>AWS</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Vercel</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>Nginx</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i>CI/CD</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Use Cases -->
+            <div class="card mb-5">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-target me-2"></i>Cas d'usage
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="d-flex">
+                                <div class="me-3">
+                                    <i class="bi bi-person-circle text-primary" style="font-size: 2rem;"></i>
+                                </div>
+                                <div>
+                                    <h6>Développeurs Solo</h6>
+                                    <p class="mb-0 text-muted">
+                                        Créez rapidement l'architecture de vos projets personnels 
+                                        sans passer des heures en recherche.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="d-flex">
+                                <div class="me-3">
+                                    <i class="bi bi-people-fill text-success" style="font-size: 2rem;"></i>
+                                </div>
+                                <div>
+                                    <h6>Équipes de développement</h6>
+                                    <p class="mb-0 text-muted">
+                                        Alignez votre équipe sur une architecture commune 
+                                        dès le début du projet.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="d-flex">
+                                <div class="me-3">
+                                    <i class="bi bi-lightbulb-fill text-warning" style="font-size: 2rem;"></i>
+                                </div>
+                                <div>
+                                    <h6>Startups</h6>
+                                    <p class="mb-0 text-muted">
+                                        Validez rapidement vos idées avec des MVP 
+                                        structurés professionnellement.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="d-flex">
+                                <div class="me-3">
+                                    <i class="bi bi-building text-info" style="font-size: 2rem;"></i>
+                                </div>
+                                <div>
+                                    <h6>Entreprises</h6>
+                                    <p class="mb-0 text-muted">
+                                        Standardisez vos architectures et 
+                                        accélérez le time-to-market.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Technical Info -->
+            <div class="card mb-5">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-code-slash me-2"></i>Informations Techniques
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <h6>Application</h6>
+                            <ul class="list-unstyled">
+                                <li><strong>Framework:</strong> Flask 3.0</li>
+                                <li><strong>Langage:</strong> Python 3.9+</li>
+                                <li><strong>Frontend:</strong> Bootstrap 5</li>
+                                <li><strong>Version:</strong> {{ app_version }}</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <h6>Intelligence Artificielle</h6>
+                            <ul class="list-unstyled">
+                                <li><strong>Moteur:</strong> OpenAI GPT</li>
+                                <li><strong>Modèle:</strong> GPT-3.5/4</li>
+                                <li><strong>API:</strong> REST</li>
+                                <li><strong>Sécurité:</strong> Chiffrement</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <h6>Export</h6>
+                            <ul class="list-unstyled">
+                                <li><strong>PDF:</strong> ReportLab</li>
+                                <li><strong>Markdown:</strong> GitHub flavor</li>
+                                <li><strong>JSON:</strong> Structuré</li>
+                                <li><strong>Formats:</strong> 3 types</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Call to Action -->
+            <div class="text-center">
+                <h3 class="mb-4">Prêt à révolutionner votre développement ?</h3>
+                <div class="d-flex gap-3 justify-content-center flex-wrap">
+                    <a href="{{ url_for('main.generator') }}" class="btn btn-primary btn-lg px-4">
+                        <i class="bi bi-magic me-2"></i>Essayer maintenant
+                    </a>
+                    <a href="{{ url_for('main.status') }}" class="btn btn-outline-primary btn-lg px-4">
+                        <i class="bi bi-activity me-2"></i>Vérifier le statut
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

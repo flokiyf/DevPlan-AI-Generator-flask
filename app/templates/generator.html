@@ -1,0 +1,262 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <!-- Header -->
+            <div class="text-center mb-5">
+                <h1 class="display-5 fw-bold mb-3">
+                    <i class="bi bi-magic me-3 text-primary"></i>
+                    Générateur de Schémas IA
+                </h1>
+                <p class="lead text-muted">
+                    Décrivez votre projet et laissez l'IA créer le schéma parfait pour vous
+                </p>
+            </div>
+
+            <!-- Generator Form -->
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-pencil-square me-2"></i>
+                        Décrivez votre projet
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <form id="generator-form">
+                        <!-- Project Type -->
+                        <div class="mb-4">
+                            <label for="project-type" class="form-label fw-semibold">
+                                <i class="bi bi-gear me-2"></i>Type de projet
+                            </label>
+                            <select class="form-select" id="project-type" name="project_type" required>
+                                <option value="">Sélectionnez le type de projet</option>
+                                <option value="ecommerce">E-commerce</option>
+                                <option value="blog">Blog/CMS</option>
+                                <option value="saas">Application SaaS</option>
+                                <option value="portfolio">Portfolio</option>
+                                <option value="api">API REST</option>
+                                <option value="mobile">Application Mobile</option>
+                                <option value="dashboard">Dashboard Analytics</option>
+                                <option value="custom">Personnalisé</option>
+                            </select>
+                        </div>
+
+                        <!-- Project Description -->
+                        <div class="mb-4">
+                            <label for="description" class="form-label fw-semibold">
+                                <i class="bi bi-text-paragraph me-2"></i>Description du projet
+                            </label>
+                            <textarea class="form-control" id="description" name="description" rows="4" 
+                                    placeholder="Décrivez votre projet, ses objectifs et fonctionnalités principales..."
+                                    required></textarea>
+                            <div class="form-text">
+                                Plus votre description est détaillée, plus le schéma généré sera précis.
+                            </div>
+                        </div>
+
+                        <!-- Technology Preferences -->
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">
+                                <i class="bi bi-stack me-2"></i>Préférences technologiques (optionnel)
+                            </label>
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <label for="frontend-pref" class="form-label">Frontend</label>
+                                    <select class="form-select" id="frontend-pref" name="frontend_preference">
+                                        <option value="">Aucune préférence</option>
+                                        <option value="react">React</option>
+                                        <option value="vue">Vue.js</option>
+                                        <option value="angular">Angular</option>
+                                        <option value="vanilla">Vanilla JS</option>
+                                        <option value="nextjs">Next.js</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="backend-pref" class="form-label">Backend</label>
+                                    <select class="form-select" id="backend-pref" name="backend_preference">
+                                        <option value="">Aucune préférence</option>
+                                        <option value="nodejs">Node.js</option>
+                                        <option value="python">Python</option>
+                                        <option value="php">PHP</option>
+                                        <option value="java">Java</option>
+                                        <option value="csharp">C#</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="database-pref" class="form-label">Base de données</label>
+                                    <select class="form-select" id="database-pref" name="database_preference">
+                                        <option value="">Aucune préférence</option>
+                                        <option value="postgresql">PostgreSQL</option>
+                                        <option value="mysql">MySQL</option>
+                                        <option value="mongodb">MongoDB</option>
+                                        <option value="sqlite">SQLite</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Project Scale -->
+                        <div class="mb-4">
+                            <label for="scale" class="form-label fw-semibold">
+                                <i class="bi bi-graph-up-arrow me-2"></i>Échelle du projet
+                            </label>
+                            <select class="form-select" id="scale" name="scale">
+                                <option value="small">Petit (prototype, MVP)</option>
+                                <option value="medium" selected>Moyen (application complète)</option>
+                                <option value="large">Grand (entreprise, haute charge)</option>
+                            </select>
+                        </div>
+
+                        <!-- Additional Requirements -->
+                        <div class="mb-4">
+                            <label for="requirements" class="form-label fw-semibold">
+                                <i class="bi bi-list-check me-2"></i>Exigences particulières (optionnel)
+                            </label>
+                            <textarea class="form-control" id="requirements" name="requirements" rows="3"
+                                    placeholder="Ex: authentification, paiements, API tiers, sécurité renforcée..."></textarea>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg" id="generate-btn">
+                                <span class="button-text">
+                                    <i class="bi bi-magic me-2"></i>Générer le schéma
+                                </span>
+                                <span class="loading-spinner spinner-border spinner-border-sm me-2" role="status"></span>
+                                <span class="loading-text" style="display: none;">Génération en cours...</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Results Section (Hidden by default) -->
+            <div id="results-section" class="mt-5" style="display: none;">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="card-title mb-0">
+                            <i class="bi bi-check-circle me-2"></i>
+                            Schéma généré avec succès !
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="schema-preview" class="mb-4">
+                            <!-- Le schéma généré sera affiché ici -->
+                        </div>
+                        
+                        <!-- Export Options -->
+                        <div class="border-top pt-4">
+                            <h6 class="fw-semibold mb-3">
+                                <i class="bi bi-download me-2"></i>Exporter le schéma
+                            </h6>
+                            <div class="d-flex gap-2 flex-wrap">
+                                <button class="btn btn-outline-danger" onclick="exportSchema('pdf')">
+                                    <i class="bi bi-file-earmark-pdf me-2"></i>PDF
+                                </button>
+                                <button class="btn btn-outline-info" onclick="exportSchema('markdown')">
+                                    <i class="bi bi-markdown me-2"></i>Markdown
+                                </button>
+                                <button class="btn btn-outline-success" onclick="exportSchema('json')">
+                                    <i class="bi bi-file-earmark-code me-2"></i>JSON
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tips Section -->
+            <div class="mt-5">
+                <div class="card border-info">
+                    <div class="card-header bg-info text-white">
+                        <h6 class="card-title mb-0">
+                            <i class="bi bi-lightbulb me-2"></i>Conseils pour une génération optimale
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <ul class="mb-0">
+                            <li>Décrivez clairement les fonctionnalités principales de votre application</li>
+                            <li>Mentionnez le nombre d'utilisateurs attendus</li>
+                            <li>Précisez les intégrations tierces nécessaires (paiement, email, etc.)</li>
+                            <li>Indiquez vos contraintes techniques ou budgétaires</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('generator-form');
+    const generateBtn = document.getElementById('generate-btn');
+    const resultsSection = document.getElementById('results-section');
+    
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        // Show loading state
+        generateBtn.classList.add('loading');
+        generateBtn.disabled = true;
+        document.querySelector('.button-text').style.display = 'none';
+        document.querySelector('.loading-text').style.display = 'inline';
+        
+        // Collect form data
+        const formData = new FormData(form);
+        const projectData = {
+            project_type: formData.get('project_type'),
+            description: formData.get('description'),
+            frontend_preference: formData.get('frontend_preference'),
+            backend_preference: formData.get('backend_preference'),
+            database_preference: formData.get('database_preference'),
+            scale: formData.get('scale'),
+            requirements: formData.get('requirements')
+        };
+        
+        try {
+            // TODO: Replace with actual API call when implemented
+            // Simulation for now
+            await new Promise(resolve => setTimeout(resolve, 3000));
+            
+            // Show mock results
+            document.getElementById('schema-preview').innerHTML = `
+                <div class="alert alert-warning">
+                    <i class="bi bi-tools me-2"></i>
+                    <strong>Fonctionnalité en développement</strong><br>
+                    Le générateur IA sera disponible dans le PR #2. 
+                    Pour l'instant, cette interface démontre le workflow utilisateur.
+                </div>
+                <div class="bg-light p-3 rounded">
+                    <h6>Aperçu du projet : ${projectData.project_type || 'Personnalisé'}</h6>
+                    <p class="mb-0 text-muted">${projectData.description}</p>
+                </div>
+            `;
+            
+            resultsSection.style.display = 'block';
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+            
+            showToast('Schéma généré avec succès ! (Mode démo)', 'success');
+            
+        } catch (error) {
+            console.error('Erreur génération:', error);
+            showToast('Erreur lors de la génération du schéma', 'danger');
+        } finally {
+            // Reset button state
+            generateBtn.classList.remove('loading');
+            generateBtn.disabled = false;
+            document.querySelector('.button-text').style.display = 'inline';
+            document.querySelector('.loading-text').style.display = 'none';
+        }
+    });
+});
+
+function exportSchema(format) {
+    showToast(`Export ${format.toUpperCase()} sera disponible dans le PR #5-6`, 'info');
+}
+</script>
+{% endblock %} 

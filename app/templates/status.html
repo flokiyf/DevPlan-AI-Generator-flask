@@ -1,0 +1,197 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <!-- Header -->
+            <div class="text-center mb-5">
+                <h1 class="display-6 fw-bold mb-3">
+                    <i class="bi bi-activity me-3 text-primary"></i>
+                    Statut du Système
+                </h1>
+                <p class="text-muted">Vérification de l'état des services et composants</p>
+            </div>
+
+            <!-- Application Info -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-info-circle me-2"></i>Informations Application
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <strong>Nom:</strong> {{ status.app_name }}
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Version:</strong> {{ status.version }}
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Environnement:</strong> 
+                            <span class="badge bg-{% if status.environment == 'production' %}success{% elif status.environment == 'development' %}warning{% else %}secondary{% endif %}">
+                                {{ status.environment }}
+                            </span>
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Mode Debug:</strong> 
+                            <span class="badge bg-{% if status.debug %}warning{% else %}success{% endif %}">
+                                {% if status.debug %}Activé{% else %}Désactivé{% endif %}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Services Status -->
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-gear me-2"></i>État des Services
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <!-- OpenAI Service -->
+                    <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                        <div>
+                            <strong>Service OpenAI</strong>
+                            <br>
+                            <small class="text-muted">Configuration de l'API OpenAI</small>
+                        </div>
+                        <div class="text-end">
+                            {% if status.openai_configured %}
+                                <span class="badge bg-success">
+                                    <i class="bi bi-check-circle me-1"></i>Configuré
+                                </span>
+                            {% else %}
+                                <span class="badge bg-danger">
+                                    <i class="bi bi-x-circle me-1"></i>Non configuré
+                                </span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Export Service -->
+                    <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                        <div>
+                            <strong>Service d'Export</strong>
+                            <br>
+                            <small class="text-muted">Dossier et permissions d'export</small>
+                        </div>
+                        <div class="text-end">
+                            {% if status.export_folder_ready %}
+                                <span class="badge bg-success">
+                                    <i class="bi bi-check-circle me-1"></i>Prêt
+                                </span>
+                            {% else %}
+                                <span class="badge bg-warning">
+                                    <i class="bi bi-exclamation-triangle me-1"></i>Attention
+                                </span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Flask Application -->
+                    <div class="d-flex justify-content-between align-items-center py-2">
+                        <div>
+                            <strong>Application Flask</strong>
+                            <br>
+                            <small class="text-muted">Serveur web principal</small>
+                        </div>
+                        <div class="text-end">
+                            <span class="badge bg-success">
+                                <i class="bi bi-check-circle me-1"></i>Actif
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Configuration Details -->
+            {% if status.export_folder_path %}
+            <div class="card mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-folder me-2"></i>Détails Configuration
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <strong>Dossier d'export:</strong>
+                            <code class="d-block mt-1">{{ status.export_folder_path }}</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Recommendations -->
+            {% if not status.openai_configured or not status.export_folder_ready %}
+            <div class="card border-warning">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-exclamation-triangle me-2"></i>Actions Recommandées
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <ul class="mb-0">
+                        {% if not status.openai_configured %}
+                        <li class="mb-2">
+                            <strong>Configurer OpenAI:</strong> 
+                            Ajoutez votre clé API OpenAI dans le fichier <code>.env</code> ou 
+                            <a href="{{ url_for('main.config_page') }}" class="text-decoration-none">configurez-la via l'interface</a>
+                        </li>
+                        {% endif %}
+                        {% if not status.export_folder_ready %}
+                        <li class="mb-2">
+                            <strong>Dossier d'export:</strong> 
+                            Vérifiez les permissions du dossier d'export ou créez-le manuellement
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Quick Actions -->
+            <div class="mt-4 text-center">
+                <div class="d-flex gap-2 justify-content-center flex-wrap">
+                    <a href="{{ url_for('main.config_page') }}" class="btn btn-primary">
+                        <i class="bi bi-gear me-2"></i>Configuration
+                    </a>
+                    <a href="{{ url_for('main.health_check') }}" class="btn btn-outline-secondary" target="_blank">
+                        <i class="bi bi-code me-2"></i>API Health Check
+                    </a>
+                    <button class="btn btn-outline-info" onclick="location.reload()">
+                        <i class="bi bi-arrow-clockwise me-2"></i>Actualiser
+                    </button>
+                </div>
+            </div>
+
+            <!-- Last Updated -->
+            <div class="text-center mt-4">
+                <small class="text-muted">
+                    <i class="bi bi-clock me-1"></i>
+                    Dernière vérification: <span id="last-updated"></span>
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Set current time
+    document.getElementById('last-updated').textContent = new Date().toLocaleString('fr-FR');
+    
+    // Auto-refresh every 30 seconds
+    setInterval(() => {
+        location.reload();
+    }, 30000);
+});
+</script>
+{% endblock %} 

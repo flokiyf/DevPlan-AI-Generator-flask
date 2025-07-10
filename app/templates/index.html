@@ -1,0 +1,208 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">
+                    <i class="bi bi-magic me-3"></i>
+                    Générateur de Schémas IA
+                </h1>
+                <p class="lead mb-4">
+                    Créez des schémas complets de projets full-stack en quelques minutes grâce à l'intelligence artificielle. 
+                    Définissez vos exigences, et laissez l'IA concevoir l'architecture parfaite pour votre projet.
+                </p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="{{ url_for('main.generator') }}" class="btn btn-light btn-lg px-4">
+                        <i class="bi bi-play-fill me-2"></i>Commencer maintenant
+                    </a>
+                    <a href="{{ url_for('main.about') }}" class="btn btn-outline-light btn-lg px-4">
+                        <i class="bi bi-info-circle me-2"></i>En savoir plus
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <div class="position-relative">
+                    <i class="bi bi-cpu-fill" style="font-size: 12rem; opacity: 0.1;"></i>
+                    <div class="position-absolute top-50 start-50 translate-middle">
+                        <i class="bi bi-stars" style="font-size: 3rem;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-lg-8 mx-auto text-center">
+                <h2 class="fw-bold mb-3">Pourquoi choisir DevPlan AI ?</h2>
+                <p class="text-muted">Notre plateforme révolutionne la conception de projets grâce à l'IA</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 text-center p-4">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <i class="bi bi-lightning-charge-fill text-primary" style="font-size: 3rem;"></i>
+                        </div>
+                        <h5 class="card-title">Génération Ultra-rapide</h5>
+                        <p class="card-text">
+                            Obtenez un schéma complet de votre projet en moins de 60 secondes. 
+                            L'IA analyse vos besoins et propose une architecture optimale.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100 text-center p-4">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <i class="bi bi-stack text-success" style="font-size: 3rem;"></i>
+                        </div>
+                        <h5 class="card-title">Stack Intelligente</h5>
+                        <p class="card-text">
+                            Technologies modernes et éprouvées. L'IA recommande la stack idéale 
+                            basée sur vos contraintes et objectifs.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100 text-center p-4">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <i class="bi bi-download text-warning" style="font-size: 3rem;"></i>
+                        </div>
+                        <h5 class="card-title">Export Multi-formats</h5>
+                        <p class="card-text">
+                            Exportez vos schémas en PDF, Markdown ou JSON. 
+                            Formats prêts pour la documentation et le développement.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How it works Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-lg-8 mx-auto text-center">
+                <h2 class="fw-bold mb-3">Comment ça fonctionne ?</h2>
+                <p class="text-muted">Un processus simple en 3 étapes</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="text-center">
+                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
+                         style="width: 80px; height: 80px; font-size: 2rem; font-weight: bold;">
+                        1
+                    </div>
+                    <h5>Décrivez votre projet</h5>
+                    <p class="text-muted">
+                        Indiquez le type d'application, les fonctionnalités souhaitées, 
+                        vos préférences technologiques et contraintes.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="text-center">
+                    <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
+                         style="width: 80px; height: 80px; font-size: 2rem; font-weight: bold;">
+                        2
+                    </div>
+                    <h5>L'IA génère le schéma</h5>
+                    <p class="text-muted">
+                        Notre IA analyse vos besoins et crée un schéma détaillé avec 
+                        architecture, stack technique et recommandations.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="text-center">
+                    <div class="bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
+                         style="width: 80px; height: 80px; font-size: 2rem; font-weight: bold;">
+                        3
+                    </div>
+                    <h5>Exportez et développez</h5>
+                    <p class="text-muted">
+                        Téléchargez votre schéma dans le format de votre choix 
+                        et commencez le développement avec confiance.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row text-center g-4">
+            <div class="col-md-3">
+                <div class="mb-2">
+                    <i class="bi bi-clock-fill text-primary" style="font-size: 2.5rem;"></i>
+                </div>
+                <h3 class="fw-bold text-primary">< 60s</h3>
+                <p class="text-muted">Temps de génération moyen</p>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="mb-2">
+                    <i class="bi bi-stack text-success" style="font-size: 2.5rem;"></i>
+                </div>
+                <h3 class="fw-bold text-success">50+</h3>
+                <p class="text-muted">Technologies supportées</p>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="mb-2">
+                    <i class="bi bi-file-earmark-pdf-fill text-warning" style="font-size: 2.5rem;"></i>
+                </div>
+                <h3 class="fw-bold text-warning">3</h3>
+                <p class="text-muted">Formats d'export</p>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="mb-2">
+                    <i class="bi bi-stars text-info" style="font-size: 2.5rem;"></i>
+                </div>
+                <h3 class="fw-bold text-info">100%</h3>
+                <p class="text-muted">Alimenté par l'IA</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5 bg-primary text-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h3 class="fw-bold mb-2">Prêt à créer votre projet ?</h3>
+                <p class="mb-0">Commencez dès maintenant avec notre générateur de schémas IA</p>
+            </div>
+            <div class="col-lg-4 text-lg-end">
+                <a href="{{ url_for('main.generator') }}" class="btn btn-light btn-lg px-4">
+                    <i class="bi bi-rocket-takeoff me-2"></i>Générer un schéma
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %} 

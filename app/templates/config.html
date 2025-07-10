@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <!-- Header -->
+            <div class="text-center mb-5">
+                <h1 class="display-6 fw-bold mb-3">
+                    <i class="bi bi-sliders me-3 text-primary"></i>
+                    Configuration
+                </h1>
+                <p class="text-muted">Paramètres et configuration de DevPlan AI Generator</p>
+            </div>
+
+            <!-- Configuration Notice -->
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle me-2"></i>
+                <strong>Interface de configuration</strong><br>
+                La configuration complète sera disponible dans le PR #2. 
+                Pour l'instant, vous pouvez modifier les variables d'environnement dans le fichier <code>.env</code>
+            </div>
+
+            <!-- Current Configuration -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-gear me-2"></i>Configuration Actuelle
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Nom de l'application</label>
+                            <input type="text" class="form-control" value="{{ app_name }}" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Version</label>
+                            <input type="text" class="form-control" value="{{ app_version }}" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Environnement</label>
+                            <input type="text" class="form-control" value="{{ config.FLASK_ENV or 'development' }}" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Mode Debug</label>
+                            <input type="text" class="form-control" value="{% if config.DEBUG %}Activé{% else %}Désactivé{% endif %}" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OpenAI Configuration -->
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-robot me-2"></i>Configuration OpenAI
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-8">
+                            <label class="form-label fw-semibold">Clé API OpenAI</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" 
+                                       value="{% if config.OPENAI_API_KEY %}{{ '•' * 20 }}{{ config.OPENAI_API_KEY[-4:] }}{% else %}Non configurée{% endif %}" 
+                                       readonly>
+                                <button class="btn btn-outline-secondary" type="button" disabled>
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold">Modèle IA</label>
+                            <input type="text" class="form-control" value="{{ config.OPENAI_MODEL or 'gpt-3.5-turbo' }}" readonly>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <small class="text-muted">
+                            <i class="bi bi-lightbulb me-1"></i>
+                            Pour configurer votre clé API OpenAI, ajoutez <code>OPENAI_API_KEY=your_key_here</code> dans votre fichier <code>.env</code>
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Export Configuration -->
+            <div class="card mb-4">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-download me-2"></i>Configuration Export
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Dossier d'export</label>
+                            <input type="text" class="form-control" value="{{ config.EXPORT_FOLDER or 'exports' }}" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Taille max fichier</label>
+                            <input type="text" class="form-control" value="{{ config.MAX_EXPORT_SIZE or '10MB' }}" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Manual Configuration Instructions -->
+            <div class="card border-info">
+                <div class="card-header bg-info text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-journal-text me-2"></i>Configuration Manuelle
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="mb-3">Pour configurer manuellement l'application, modifiez les variables d'environnement :</p>
+                    
+                    <h6>1. Créer le fichier .env</h6>
+                    <pre class="bg-light p-3 rounded"><code># Copier env.example vers .env
+cp env.example .env</code></pre>
+                    
+                    <h6>2. Variables importantes</h6>
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Variable</th>
+                                    <th>Description</th>
+                                    <th>Exemple</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>OPENAI_API_KEY</code></td>
+                                    <td>Clé API OpenAI</td>
+                                    <td>sk-proj-...</td>
+                                </tr>
+                                <tr>
+                                    <td><code>FLASK_ENV</code></td>
+                                    <td>Environnement Flask</td>
+                                    <td>development</td>
+                                </tr>
+                                <tr>
+                                    <td><code>SECRET_KEY</code></td>
+                                    <td>Clé secrète Flask</td>
+                                    <td>random-secret-key</td>
+                                </tr>
+                                <tr>
+                                    <td><code>EXPORT_FOLDER</code></td>
+                                    <td>Dossier d'export</td>
+                                    <td>exports</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="text-center mt-4">
+                <div class="d-flex gap-2 justify-content-center flex-wrap">
+                    <a href="{{ url_for('main.status') }}" class="btn btn-primary">
+                        <i class="bi bi-activity me-2"></i>Vérifier le statut
+                    </a>
+                    <button class="btn btn-outline-secondary" onclick="location.reload()">
+                        <i class="bi bi-arrow-clockwise me-2"></i>Actualiser
+                    </button>
+                    <a href="{{ url_for('main.index') }}" class="btn btn-outline-primary">
+                        <i class="bi bi-house me-2"></i>Retour à l'accueil
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
