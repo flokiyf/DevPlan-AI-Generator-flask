@@ -124,6 +124,16 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'main.schema_advanced' %}active{% endif %}" href="{{ url_for('main.schema_advanced') }}">
+                            <i class="bi bi-diagram-3 me-1"></i>Schémas Avancés
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'main.openai_test' %}active{% endif %}" href="{{ url_for('main.openai_test') }}">
+                            <i class="bi bi-cpu me-1"></i>Test OpenAI
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link {% if request.endpoint == 'main.about' %}active{% endif %}" href="{{ url_for('main.about') }}">
                             <i class="bi bi-info-circle me-1"></i>À propos
                         </a>

@@ -1,0 +1,407 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <!-- Header -->
+            <div class="text-center mb-5">
+                <h1 class="display-5 fw-bold mb-3">
+                    <i class="bi bi-cpu me-3 text-primary"></i>
+                    Test OpenAI
+                </h1>
+                <p class="lead text-muted">
+                    Testez votre configuration OpenAI et générez un plan de développement de test
+                </p>
+            </div>
+
+            <!-- Configuration Status -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-gear me-2"></i>Statut de Configuration
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div id="config-status" class="text-center">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Vérification...</span>
+                        </div>
+                        <p class="mt-2">Vérification de la configuration...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Connection Test -->
+            <div class="card mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-wifi me-2"></i>Test de Connexion
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-3">
+                        <button id="test-connection-btn" class="btn btn-info btn-lg">
+                            <i class="bi bi-play-circle me-2"></i>
+                            <span class="button-text">Tester la connexion</span>
+                            <span class="loading-text" style="display: none;">
+                                <span class="spinner-border spinner-border-sm me-2"></span>
+                                Test en cours...
+                            </span>
+                        </button>
+                    </div>
+                    <div id="connection-result" style="display: none;"></div>
+                </div>
+            </div>
+
+            <!-- Plan Generation Test -->
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-magic me-2"></i>Test de Génération de Plan
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form id="test-plan-form" class="mb-3">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="test-project-type" class="form-label">Type de projet test</label>
+                                    <select class="form-select" id="test-project-type" required>
+                                        <option value="ecommerce">E-commerce</option>
+                                        <option value="blog">Blog/CMS</option>
+                                        <option value="api" selected>API REST</option>
+                                        <option value="dashboard">Dashboard</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="test-scale" class="form-label">Échelle</label>
+                                    <select class="form-select" id="test-scale">
+                                        <option value="small" selected>Petit</option>
+                                        <option value="medium">Moyen</option>
+                                        <option value="large">Grand</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="test-description" class="form-label">Description</label>
+                            <textarea class="form-control" id="test-description" rows="2" 
+                                    placeholder="Description de test pour valider l'API OpenAI">API REST pour gestion des utilisateurs et authentification</textarea>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" id="generate-plan-btn" class="btn btn-success btn-lg">
+                                <i class="bi bi-gear me-2"></i>
+                                <span class="button-text">Générer un plan de test</span>
+                                <span class="loading-text" style="display: none;">
+                                    <span class="spinner-border spinner-border-sm me-2"></span>
+                                    Génération en cours...
+                                </span>
+                            </button>
+                        </div>
+                    </form>
+                    <div id="plan-result" style="display: none;"></div>
+                </div>
+            </div>
+
+            <!-- Instructions -->
+            <div class="card border-warning">
+                <div class="card-header bg-warning text-dark">
+                    <h6 class="card-title mb-0">
+                        <i class="bi bi-info-circle me-2"></i>Instructions
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <ol class="mb-0">
+                        <li><strong>Configuration :</strong> Assurez-vous que votre clé API OpenAI est configurée</li>
+                        <li><strong>Test de connexion :</strong> Cliquez sur "Tester la connexion" pour valider votre configuration</li>
+                        <li><strong>Test de génération :</strong> Utilisez le formulaire pour tester la génération de plans</li>
+                        <li><strong>Résultats :</strong> Vérifiez que les réponses sont cohérentes et complètes</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Charger le statut de configuration au démarrage
+    loadConfigStatus();
+    
+    // Event listener pour le test de connexion
+    document.getElementById('test-connection-btn').addEventListener('click', testConnection);
+    
+    // Event listener pour le formulaire de test
+    document.getElementById('test-plan-form').addEventListener('submit', generateTestPlan);
+});
+
+async function loadConfigStatus() {
+    try {
+        const response = await fetch('/api/openai/config', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('meta[name=csrf-token]').getAttribute('content')
+            }
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok && result.success) {
+            displayConfigStatus(result.data);
+        } else {
+            throw new Error(result.error || 'Erreur lors du chargement de la configuration');
+        }
+        
+    } catch (error) {
+        console.error('Erreur config status:', error);
+        displayConfigError(error.message);
+    }
+}
+
+function displayConfigStatus(config) {
+    const statusDiv = document.getElementById('config-status');
+    
+    let statusHtml = '<div class="row text-center">';
+    
+    // API Key status
+    const apiKeyStatus = config.api_key_configured;
+    statusHtml += `
+        <div class="col-md-4">
+            <div class="p-3">
+                <i class="bi bi-key fs-2 ${apiKeyStatus ? 'text-success' : 'text-danger'}"></i>
+                <h6 class="mt-2">Clé API</h6>
+                <span class="badge ${apiKeyStatus ? 'bg-success' : 'bg-danger'}">
+                    ${apiKeyStatus ? 'Configurée' : 'Non configurée'}
+                </span>
+            </div>
+        </div>
+    `;
+    
+    // Model status
+    statusHtml += `
+        <div class="col-md-4">
+            <div class="p-3">
+                <i class="bi bi-cpu fs-2 text-info"></i>
+                <h6 class="mt-2">Modèle</h6>
+                <span class="badge bg-info">${config.model}</span>
+            </div>
+        </div>
+    `;
+    
+    // Organization status
+    const orgStatus = config.organization_configured;
+    statusHtml += `
+        <div class="col-md-4">
+            <div class="p-3">
+                <i class="bi bi-building fs-2 ${orgStatus ? 'text-success' : 'text-secondary'}"></i>
+                <h6 class="mt-2">Organisation</h6>
+                <span class="badge ${orgStatus ? 'bg-success' : 'bg-secondary'}">
+                    ${orgStatus ? 'Configurée' : 'Optionnelle'}
+                </span>
+            </div>
+        </div>
+    `;
+    
+    statusHtml += '</div>';
+    
+    // Message global
+    if (apiKeyStatus) {
+        statusHtml += '<div class="alert alert-success mt-3"><i class="bi bi-check-circle me-2"></i>Configuration prête pour les tests</div>';
+    } else {
+        statusHtml += '<div class="alert alert-danger mt-3"><i class="bi bi-exclamation-triangle me-2"></i>Veuillez configurer votre clé API OpenAI</div>';
+    }
+    
+    statusDiv.innerHTML = statusHtml;
+}
+
+function displayConfigError(error) {
+    const statusDiv = document.getElementById('config-status');
+    statusDiv.innerHTML = `
+        <div class="alert alert-danger">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            Erreur de configuration: ${error}
+        </div>
+    `;
+}
+
+async function testConnection() {
+    const btn = document.getElementById('test-connection-btn');
+    const resultDiv = document.getElementById('connection-result');
+    
+    // État de chargement
+    btn.disabled = true;
+    btn.querySelector('.button-text').style.display = 'none';
+    btn.querySelector('.loading-text').style.display = 'inline';
+    
+    try {
+        const response = await fetch('/api/openai/test', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('meta[name=csrf-token]').getAttribute('content')
+            }
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok && result.success) {
+            displayConnectionSuccess(result.data);
+        } else {
+            displayConnectionError(result.error || 'Erreur de connexion');
+        }
+        
+    } catch (error) {
+        console.error('Erreur test connexion:', error);
+        displayConnectionError(error.message);
+    } finally {
+        // Restaurer l'état du bouton
+        btn.disabled = false;
+        btn.querySelector('.button-text').style.display = 'inline';
+        btn.querySelector('.loading-text').style.display = 'none';
+    }
+}
+
+function displayConnectionSuccess(data) {
+    const resultDiv = document.getElementById('connection-result');
+    resultDiv.style.display = 'block';
+    resultDiv.innerHTML = `
+        <div class="alert alert-success">
+            <h6><i class="bi bi-check-circle me-2"></i>Connexion réussie !</h6>
+            <div class="mt-2">
+                <small class="text-muted">
+                    <strong>Modèle utilisé:</strong> ${data.model_used}<br>
+                    <strong>Réponse:</strong> "${data.response}"<br>
+                    <strong>Tokens utilisés:</strong> ${data.tokens_used}<br>
+                    <strong>Timestamp:</strong> ${new Date(data.timestamp).toLocaleString('fr-FR')}
+                </small>
+            </div>
+        </div>
+    `;
+}
+
+function displayConnectionError(error) {
+    const resultDiv = document.getElementById('connection-result');
+    resultDiv.style.display = 'block';
+    resultDiv.innerHTML = `
+        <div class="alert alert-danger">
+            <h6><i class="bi bi-exclamation-triangle me-2"></i>Échec de connexion</h6>
+            <p class="mb-0">Erreur: ${error}</p>
+        </div>
+    `;
+}
+
+async function generateTestPlan(event) {
+    event.preventDefault();
+    
+    const btn = document.getElementById('generate-plan-btn');
+    const resultDiv = document.getElementById('plan-result');
+    
+    // État de chargement
+    btn.disabled = true;
+    btn.querySelector('.button-text').style.display = 'none';
+    btn.querySelector('.loading-text').style.display = 'inline';
+    
+    // Collecter les données du formulaire
+    const projectData = {
+        project_type: document.getElementById('test-project-type').value,
+        description: document.getElementById('test-description').value,
+        scale: document.getElementById('test-scale').value,
+        requirements: 'Test de génération de plan via OpenAI'
+    };
+    
+    try {
+        const response = await fetch('/api/openai/generate-plan', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('meta[name=csrf-token]').getAttribute('content')
+            },
+            body: JSON.stringify(projectData)
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok && result.success) {
+            displayPlanSuccess(result.data.content);
+        } else {
+            displayPlanError(result.error || 'Erreur de génération');
+        }
+        
+    } catch (error) {
+        console.error('Erreur génération plan:', error);
+        displayPlanError(error.message);
+    } finally {
+        // Restaurer l'état du bouton
+        btn.disabled = false;
+        btn.querySelector('.button-text').style.display = 'inline';
+        btn.querySelector('.loading-text').style.display = 'none';
+    }
+}
+
+function displayPlanSuccess(content) {
+    const resultDiv = document.getElementById('plan-result');
+    resultDiv.style.display = 'block';
+    
+    // Formatter le contenu Markdown en HTML simple
+    const formattedContent = formatGeneratedPlan(content);
+    
+    resultDiv.innerHTML = `
+        <div class="alert alert-success">
+            <h6><i class="bi bi-check-circle me-2"></i>Plan généré avec succès !</h6>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h6 class="card-title">Plan de développement généré :</h6>
+                <div class="generated-content">${formattedContent}</div>
+            </div>
+        </div>
+    `;
+}
+
+function displayPlanError(error) {
+    const resultDiv = document.getElementById('plan-result');
+    resultDiv.style.display = 'block';
+    resultDiv.innerHTML = `
+        <div class="alert alert-danger">
+            <h6><i class="bi bi-exclamation-triangle me-2"></i>Échec de génération</h6>
+            <p class="mb-0">Erreur: ${error}</p>
+        </div>
+    `;
+}
+
+function formatGeneratedPlan(content) {
+    // Formatage simple du Markdown en HTML
+    let formatted = content
+        // Headers
+        .replace(/### (.*$)/gm, '<h5 class="text-primary mt-3 mb-2">$1</h5>')
+        .replace(/## (.*$)/gm, '<h4 class="text-primary mt-4 mb-3">$1</h4>')
+        .replace(/# (.*$)/gm, '<h3 class="text-primary mt-4 mb-3">$1</h3>')
+        // Listes
+        .replace(/^\* (.*$)/gm, '<li>$1</li>')
+        .replace(/^- (.*$)/gm, '<li>$1</li>')
+        // Gras
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        // Code inline
+        .replace(/`(.*?)`/g, '<code class="bg-light px-1 rounded">$1</code>')
+        // Retours à la ligne
+        .replace(/\n\n/g, '</p><p>')
+        .replace(/\n/g, '<br>');
+    
+    // Wrap les listes
+    formatted = formatted.replace(/(<li>.*?<\/li>)/s, '<ul>$1</ul>');
+    
+    // Wrap en paragraphes
+    if (!formatted.startsWith('<h') && !formatted.startsWith('<div')) {
+        formatted = '<p>' + formatted + '</p>';
+    }
+    
+    return formatted;
+}
+</script>
+{% endblock %} 

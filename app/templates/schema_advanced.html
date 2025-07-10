@@ -1,0 +1,656 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <!-- Header -->
+            <div class="text-center mb-5">
+                <h1 class="display-5 fw-bold mb-3">
+                    <i class="bi bi-diagram-3 me-3 text-primary"></i>
+                    Générateur de Schémas Avancés
+                </h1>
+                <p class="lead text-muted">
+                    Génération de schémas techniques détaillés avec architecture système, estimations de coûts et timeline
+                </p>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="card text-center border-primary">
+                        <div class="card-body">
+                            <i class="bi bi-cpu-fill text-primary fs-1"></i>
+                            <h6 class="mt-2">Analyse de Complexité</h6>
+                            <button class="btn btn-outline-primary btn-sm" onclick="analyzeComplexity()">
+                                Analyser
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-center border-info">
+                        <div class="card-body">
+                            <i class="bi bi-stack text-info fs-1"></i>
+                            <h6 class="mt-2">Recommandations Tech</h6>
+                            <button class="btn btn-outline-info btn-sm" onclick="getTechRecommendations()">
+                                Recommander
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-center border-success">
+                        <div class="card-body">
+                            <i class="bi bi-gear-fill text-success fs-1"></i>
+                            <h6 class="mt-2">Schéma Complet</h6>
+                            <button class="btn btn-outline-success btn-sm" onclick="generateDetailedSchema()">
+                                Générer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Advanced Form -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-gradient text-white" style="background: linear-gradient(135deg, #2563eb, #3b82f6);">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-pencil-square me-2"></i>
+                        Configuration Avancée du Projet
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <form id="advanced-form">
+                        <div class="row">
+                            <!-- Colonne gauche -->
+                            <div class="col-md-6">
+                                <!-- Project Type -->
+                                <div class="mb-3">
+                                    <label for="project-type" class="form-label fw-semibold">
+                                        <i class="bi bi-gear me-2"></i>Type de projet
+                                    </label>
+                                    <select class="form-select" id="project-type" name="project_type" required>
+                                        <option value="">Sélectionnez le type de projet</option>
+                                        <option value="ecommerce">E-commerce</option>
+                                        <option value="blog">Blog/CMS</option>
+                                        <option value="saas">Application SaaS</option>
+                                        <option value="portfolio">Portfolio</option>
+                                        <option value="api">API REST</option>
+                                        <option value="mobile">Application Mobile</option>
+                                        <option value="dashboard">Dashboard Analytics</option>
+                                        <option value="custom">Personnalisé</option>
+                                    </select>
+                                </div>
+
+                                <!-- Project Description -->
+                                <div class="mb-3">
+                                    <label for="description" class="form-label fw-semibold">
+                                        <i class="bi bi-text-paragraph me-2"></i>Description du projet
+                                    </label>
+                                    <textarea class="form-control" id="description" name="description" rows="3" 
+                                            placeholder="Décrivez votre projet..."
+                                            required></textarea>
+                                </div>
+
+                                <!-- Project Scale -->
+                                <div class="mb-3">
+                                    <label for="scale" class="form-label fw-semibold">
+                                        <i class="bi bi-graph-up-arrow me-2"></i>Échelle du projet
+                                    </label>
+                                    <select class="form-select" id="scale" name="scale">
+                                        <option value="small">Petit (prototype, MVP)</option>
+                                        <option value="medium" selected>Moyen (application complète)</option>
+                                        <option value="large">Grand (entreprise, haute charge)</option>
+                                    </select>
+                                </div>
+
+                                <!-- Requirements -->
+                                <div class="mb-3">
+                                    <label for="requirements" class="form-label fw-semibold">
+                                        <i class="bi bi-list-check me-2"></i>Exigences particulières
+                                    </label>
+                                    <textarea class="form-control" id="requirements" name="requirements" rows="2"
+                                            placeholder="Authentification, paiements, temps réel, sécurité..."></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Colonne droite -->
+                            <div class="col-md-6">
+                                <!-- Technology Preferences -->
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">
+                                        <i class="bi bi-stack me-2"></i>Préférences technologiques
+                                    </label>
+                                    <div class="row g-2">
+                                        <div class="col-12">
+                                            <label for="frontend-pref" class="form-label">Frontend</label>
+                                            <select class="form-select" id="frontend-pref" name="frontend_preference">
+                                                <option value="">Aucune préférence</option>
+                                                <option value="react">React</option>
+                                                <option value="vue">Vue.js</option>
+                                                <option value="angular">Angular</option>
+                                                <option value="nextjs">Next.js</option>
+                                                <option value="vanilla">Vanilla JS</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12">
+                                            <label for="backend-pref" class="form-label">Backend</label>
+                                            <select class="form-select" id="backend-pref" name="backend_preference">
+                                                <option value="">Aucune préférence</option>
+                                                <option value="nodejs">Node.js</option>
+                                                <option value="python">Python</option>
+                                                <option value="php">PHP</option>
+                                                <option value="java">Java</option>
+                                                <option value="csharp">C#</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12">
+                                            <label for="database-pref" class="form-label">Base de données</label>
+                                            <select class="form-select" id="database-pref" name="database_preference">
+                                                <option value="">Aucune préférence</option>
+                                                <option value="postgresql">PostgreSQL</option>
+                                                <option value="mysql">MySQL</option>
+                                                <option value="mongodb">MongoDB</option>
+                                                <option value="sqlite">SQLite</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Results Container -->
+            <div id="results-container" style="display: none;">
+                <!-- Complexity Analysis Result -->
+                <div id="complexity-result" class="card mb-4" style="display: none;">
+                    <div class="card-header bg-info text-white">
+                        <h6 class="mb-0">
+                            <i class="bi bi-cpu me-2"></i>Analyse de Complexité
+                        </h6>
+                    </div>
+                    <div class="card-body" id="complexity-content">
+                        <!-- Content will be inserted here -->
+                    </div>
+                </div>
+
+                <!-- Tech Recommendations Result -->
+                <div id="tech-result" class="card mb-4" style="display: none;">
+                    <div class="card-header bg-primary text-white">
+                        <h6 class="mb-0">
+                            <i class="bi bi-stack me-2"></i>Recommandations Technologiques
+                        </h6>
+                    </div>
+                    <div class="card-body" id="tech-content">
+                        <!-- Content will be inserted here -->
+                    </div>
+                </div>
+
+                <!-- Detailed Schema Result -->
+                <div id="schema-result" class="card mb-4" style="display: none;">
+                    <div class="card-header bg-success text-white">
+                        <h6 class="mb-0">
+                            <i class="bi bi-diagram-3 me-2"></i>Schéma Technique Détaillé
+                        </h6>
+                    </div>
+                    <div class="card-body" id="schema-content">
+                        <!-- Content will be inserted here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Info Panel -->
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="card border-info">
+                        <div class="card-header bg-info text-white">
+                            <h6 class="mb-0">
+                                <i class="bi bi-info-circle me-2"></i>Fonctionnalités Avancées
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled mb-0">
+                                <li><i class="bi bi-check2 text-success me-2"></i>Analyse automatique de complexité</li>
+                                <li><i class="bi bi-check2 text-success me-2"></i>Recommandations technologiques intelligentes</li>
+                                <li><i class="bi bi-check2 text-success me-2"></i>Architecture système détaillée</li>
+                                <li><i class="bi bi-check2 text-success me-2"></i>Estimations de temps et coûts</li>
+                                <li><i class="bi bi-check2 text-success me-2"></i>Identification des risques</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card border-warning">
+                        <div class="card-header bg-warning text-dark">
+                            <h6 class="mb-0">
+                                <i class="bi bi-lightbulb me-2"></i>Conseils d'Utilisation
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled mb-0">
+                                <li><i class="bi bi-arrow-right text-primary me-2"></i>Commencez par analyser la complexité</li>
+                                <li><i class="bi bi-arrow-right text-primary me-2"></i>Obtenez des recommandations techniques</li>
+                                <li><i class="bi bi-arrow-right text-primary me-2"></i>Générez le schéma complet en dernier</li>
+                                <li><i class="bi bi-arrow-right text-primary me-2"></i>Plus de détails = meilleur résultat</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Variables globales
+let currentProjectData = {};
+
+// Fonction pour collecter les données du formulaire
+function collectFormData() {
+    const form = document.getElementById('advanced-form');
+    const formData = new FormData(form);
+    
+    const data = {
+        project_type: formData.get('project_type'),
+        description: formData.get('description'),
+        scale: formData.get('scale'),
+        requirements: formData.get('requirements'),
+        frontend_preference: formData.get('frontend_preference'),
+        backend_preference: formData.get('backend_preference'),
+        database_preference: formData.get('database_preference')
+    };
+    
+    // Validation basique
+    if (!data.project_type || !data.description) {
+        showToast('Veuillez remplir au minimum le type et la description du projet', 'warning');
+        return null;
+    }
+    
+    currentProjectData = data;
+    return data;
+}
+
+// Analyse de complexité
+async function analyzeComplexity() {
+    const data = collectFormData();
+    if (!data) return;
+    
+    const complexityBtn = document.querySelector('[onclick="analyzeComplexity()"]');
+    const originalText = complexityBtn.textContent;
+    complexityBtn.textContent = 'Analyse...';
+    complexityBtn.disabled = true;
+    
+    try {
+        const response = await fetch('/api/schema/analyze-complexity', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('meta[name=csrf-token]').getAttribute('content')
+            },
+            body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok && result.success) {
+            displayComplexityResult(result.data);
+            showToast('Analyse de complexité terminée', 'success');
+        } else {
+            throw new Error(result.error || 'Erreur lors de l\'analyse');
+        }
+        
+    } catch (error) {
+        console.error('Erreur analyse complexité:', error);
+        showToast(`Erreur: ${error.message}`, 'danger');
+    } finally {
+        complexityBtn.textContent = originalText;
+        complexityBtn.disabled = false;
+    }
+}
+
+// Recommandations technologiques
+async function getTechRecommendations() {
+    const data = collectFormData();
+    if (!data) return;
+    
+    const techBtn = document.querySelector('[onclick="getTechRecommendations()"]');
+    const originalText = techBtn.textContent;
+    techBtn.textContent = 'Analyse...';
+    techBtn.disabled = true;
+    
+    try {
+        const response = await fetch('/api/schema/tech-recommendations', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('meta[name=csrf-token]').getAttribute('content')
+            },
+            body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok && result.success) {
+            displayTechRecommendations(result.data);
+            showToast('Recommandations technologiques générées', 'success');
+        } else {
+            throw new Error(result.error || 'Erreur lors de la génération');
+        }
+        
+    } catch (error) {
+        console.error('Erreur recommandations tech:', error);
+        showToast(`Erreur: ${error.message}`, 'danger');
+    } finally {
+        techBtn.textContent = originalText;
+        techBtn.disabled = false;
+    }
+}
+
+// Génération du schéma détaillé
+async function generateDetailedSchema() {
+    const data = collectFormData();
+    if (!data) return;
+    
+    const schemaBtn = document.querySelector('[onclick="generateDetailedSchema()"]');
+    const originalText = schemaBtn.textContent;
+    schemaBtn.textContent = 'Génération...';
+    schemaBtn.disabled = true;
+    
+    try {
+        const response = await fetch('/api/schema/generate-detailed', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('meta[name=csrf-token]').getAttribute('content')
+            },
+            body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok && result.success) {
+            displayDetailedSchema(result.data.schema);
+            showToast('Schéma technique détaillé généré avec succès !', 'success');
+        } else {
+            throw new Error(result.error || 'Erreur lors de la génération');
+        }
+        
+    } catch (error) {
+        console.error('Erreur génération schéma:', error);
+        showToast(`Erreur: ${error.message}`, 'danger');
+    } finally {
+        schemaBtn.textContent = originalText;
+        schemaBtn.disabled = false;
+    }
+}
+
+// Affichage des résultats de complexité
+function displayComplexityResult(data) {
+    const content = document.getElementById('complexity-content');
+    
+    const complexityColors = {
+        'simple': 'success',
+        'moderate': 'warning',
+        'complex': 'orange',
+        'enterprise': 'danger'
+    };
+    
+    const color = complexityColors[data.complexity] || 'secondary';
+    
+    content.innerHTML = `
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h5 class="text-${color}">
+                    <i class="bi bi-speedometer2 me-2"></i>
+                    Complexité: ${data.complexity_name}
+                </h5>
+                <p class="text-muted mb-0">
+                    Niveau de complexité détecté pour votre projet
+                </p>
+            </div>
+            <div class="col-md-6 text-end">
+                <div class="badge bg-${color} fs-6 p-3">
+                    ${data.complexity.toUpperCase()}
+                </div>
+            </div>
+        </div>
+    `;
+    
+    showResult('complexity-result');
+}
+
+// Affichage des recommandations technologiques
+function displayTechRecommendations(data) {
+    const content = document.getElementById('tech-content');
+    
+    let html = `
+        <div class="mb-3">
+            <span class="badge bg-info mb-2">Complexité: ${data.complexity}</span>
+        </div>
+        <div class="row">
+    `;
+    
+    data.recommendations.forEach(rec => {
+        const categoryIcons = {
+            'frontend': 'display',
+            'backend': 'server',
+            'database': 'database'
+        };
+        
+        const icon = categoryIcons[rec.category] || 'gear';
+        
+        html += `
+            <div class="col-md-4 mb-3">
+                <div class="card h-100 border-primary">
+                    <div class="card-body">
+                        <h6 class="card-title text-primary">
+                            <i class="bi bi-${icon} me-2"></i>${rec.name}
+                        </h6>
+                        <span class="badge bg-light text-dark mb-2">${rec.category}</span>
+                        <span class="badge bg-secondary mb-2">${rec.version}</span>
+                        <p class="card-text small">${rec.reason}</p>
+                        <div class="mt-2">
+                            <small class="text-muted">
+                                <strong>Courbe d'apprentissage:</strong> ${rec.learning_curve}<br>
+                                <strong>Popularité:</strong> ${rec.popularity_score}/10<br>
+                                <strong>Maintenance:</strong> ${rec.maintenance_cost}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    
+    html += '</div>';
+    content.innerHTML = html;
+    
+    showResult('tech-result');
+}
+
+// Affichage du schéma détaillé
+function displayDetailedSchema(schema) {
+    const content = document.getElementById('schema-content');
+    
+    let html = `
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h4 class="text-primary">${schema.project_name}</h4>
+                <p class="text-muted">${schema.description}</p>
+                <span class="badge bg-info">${schema.complexity}</span>
+                <span class="badge bg-success">${schema.total_duration_weeks} semaines</span>
+                <span class="badge bg-warning">${Math.round(schema.cost_estimation.development_cost)} €</span>
+            </div>
+            <div class="col-md-4 text-end">
+                <div class="text-muted">
+                    <small>Généré le ${new Date(schema.generated_at).toLocaleDateString('fr-FR')}</small><br>
+                    <small>Confiance: ${Math.round(schema.confidence_score * 100)}%</small>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Architecture -->
+        <div class="card mb-3">
+            <div class="card-header">
+                <h6 class="mb-0"><i class="bi bi-diagram-3 me-2"></i>Architecture Système</h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+    `;
+    
+    schema.architecture_components.forEach(component => {
+        html += `
+            <div class="col-md-6 mb-3">
+                <div class="border rounded p-3">
+                    <h6 class="text-primary">${component.name}</h6>
+                    <p class="small mb-2">${component.description}</p>
+                    <div class="small text-muted">
+                        <strong>Technologies:</strong> ${component.technologies.join(', ')}<br>
+                        <strong>Scalabilité:</strong> ${component.scalability}<br>
+                        <strong>Complexité:</strong> ${component.estimated_complexity}/10
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    
+    html += `
+                </div>
+            </div>
+        </div>
+        
+        <!-- Timeline -->
+        <div class="card mb-3">
+            <div class="card-header">
+                <h6 class="mb-0"><i class="bi bi-calendar-week me-2"></i>Planning de Développement</h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+    `;
+    
+    schema.project_phases.forEach((phase, index) => {
+        html += `
+            <div class="col-md-6 mb-3">
+                <div class="timeline-item border-start border-primary border-3 ps-3">
+                    <h6 class="text-primary">Phase ${index + 1}: ${phase.name}</h6>
+                    <p class="small mb-2">${phase.description}</p>
+                    <div class="small text-muted">
+                        <strong>Durée:</strong> ${phase.duration_weeks} semaines<br>
+                        <strong>Équipe:</strong> ${phase.team_size} personnes<br>
+                        <strong>Tâches principales:</strong> ${phase.tasks.slice(0, 3).join(', ')}
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    
+    html += `
+                </div>
+            </div>
+        </div>
+        
+        <!-- Estimations -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="mb-0"><i class="bi bi-currency-euro me-2"></i>Estimations Financières</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <div class="col-6">
+                                <h5 class="text-primary">${Math.round(schema.cost_estimation.development_cost).toLocaleString()} €</h5>
+                                <small class="text-muted">Développement</small>
+                            </div>
+                            <div class="col-6">
+                                <h5 class="text-success">${Math.round(schema.cost_estimation.infrastructure_cost_monthly)} €/mois</h5>
+                                <small class="text-muted">Infrastructure</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="mb-0"><i class="bi bi-clock me-2"></i>Estimations Temporelles</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <div class="col-6">
+                                <h5 class="text-info">${schema.time_estimation.estimated_hours}h</h5>
+                                <small class="text-muted">Développement estimé</small>
+                            </div>
+                            <div class="col-6">
+                                <h5 class="text-warning">${schema.total_duration_weeks} sem.</h5>
+                                <small class="text-muted">Durée totale</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recommandations et Risques -->
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <div class="card border-success">
+                    <div class="card-header bg-success text-white">
+                        <h6 class="mb-0"><i class="bi bi-check-circle me-2"></i>Recommandations</h6>
+                    </div>
+                    <div class="card-body">
+                        <ul class="small mb-0">
+    `;
+    
+    schema.recommendations.slice(0, 5).forEach(rec => {
+        html += `<li>${rec}</li>`;
+    });
+    
+    html += `
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card border-warning">
+                    <div class="card-header bg-warning text-dark">
+                        <h6 class="mb-0"><i class="bi bi-exclamation-triangle me-2"></i>Risques Identifiés</h6>
+                    </div>
+                    <div class="card-body">
+                        <ul class="small mb-0">
+    `;
+    
+    schema.risks.slice(0, 5).forEach(risk => {
+        html += `<li>${risk}</li>`;
+    });
+    
+    html += `
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    content.innerHTML = html;
+    showResult('schema-result');
+}
+
+// Fonction utilitaire pour afficher les résultats
+function showResult(resultId) {
+    document.getElementById('results-container').style.display = 'block';
+    document.getElementById(resultId).style.display = 'block';
+    
+    // Scroll vers le résultat
+    document.getElementById(resultId).scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+    });
+}
+</script>
+{% endblock %} 
