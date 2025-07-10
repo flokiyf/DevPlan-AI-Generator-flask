@@ -2,7 +2,7 @@
 Routes principales pour DevPlan AI Generator
 """
 
-from flask import Blueprint, render_template, current_app, jsonify
+from flask import Blueprint, render_template, current_app, jsonify, request
 import os
 
 # Création du blueprint
@@ -100,6 +100,150 @@ def config_page():
     return render_template('config.html', 
                          title="Configuration",
                          description="Configurez votre instance DevPlan")
+
+@main_bp.route('/openai-test')
+def openai_test():
+    """Page de test de la connexion OpenAI"""
+    return render_template('openai_test.html')
+
+
+@main_bp.route('/api/openai/test', methods=['POST'])
+def api_openai_test():
+    """API pour tester la connexion OpenAI"""
+    try:
+        from ..services import OpenAIService
+        
+        # Initialisation du service OpenAI
+        openai_service = OpenAIService()
+        
+        # Test de connexion
+        result = openai_service.test_connection()
+        
+        return jsonify({
+            "success": True,
+            "data": result
+        })
+        
+    except Exception as e:
+        current_app.logger.error(f"Erreur test OpenAI: {str(e)}")
+        return jsonify({
+            "success": False,
+            "error": str(e),
+            "message": "Erreur lors du test de connexion OpenAI"
+        }), 500
+
+
+@main_bp.route('/api/openai/generate-plan', methods=['POST'])
+def api_generate_plan():
+    """API pour générer un plan de développement"""
+    try:
+        from ..services import OpenAIService, ValidationService
+        
+        # Récupération des données
+        data = request.get_json()
+        
+        if not data:
+            return jsonify({
+                "success": False,
+                "error": "Aucune donnée fournie"
+            }), 400
+        
+        # Validation des données
+        validation_service = ValidationService()
+        is_valid, errors = validation_service.validate_project_data(data)
+        
+        if not is_valid:
+            return jsonify({
+                "success": False,
+                "error": "Données invalides",
+                "validation_errors": errors
+            }), 400
+        
+        # Nettoyage des données
+        project_description = validation_service.sanitize_input(data.get('project_description', ''))
+        requirements = data.get('requirements', {})
+        
+        # Génération du plan
+        openai_service = OpenAIService()
+        result = openai_service.generate_development_plan(project_description, requirements)
+        
+        return jsonify({
+            "success": True,
+            "data": result
+        })
+        
+    except Exception as e:
+        current_app.logger.error(f"Erreur génération plan: {str(e)}")
+        return jsonify({
+            "success": False,
+            "error": str(e),
+            "message": "Erreur lors de la génération du plan"
+        }), 500
+
+
+@main_bp.route('/api/openai/config', methods=['GET', 'POST'])
+def api_openai_config():
+    """API pour la configuration OpenAI"""
+    if request.method == 'GET':
+        try:
+            from ..services import OpenAIService
+            
+            openai_service = OpenAIService()
+            config_info = openai_service.get_model_info()
+            
+            return jsonify({
+                "success": True,
+                "data": config_info
+            })
+            
+        except Exception as e:
+            current_app.logger.error(f"Erreur récupération config: {str(e)}")
+            return jsonify({
+                "success": False,
+                "error": str(e)
+            }), 500
+    
+    elif request.method == 'POST':
+        try:
+            from ..services import ValidationService
+            
+            data = request.get_json()
+            
+            if not data:
+                return jsonify({
+                    "success": False,
+                    "error": "Aucune donnée fournie"
+                }), 400
+            
+            # Validation de la configuration
+            validation_service = ValidationService()
+            api_key = data.get('api_key', '')
+            model = data.get('model', '')
+            
+            is_valid, errors = validation_service.validate_openai_config(api_key, model)
+            
+            if not is_valid:
+                return jsonify({
+                    "success": False,
+                    "error": "Configuration invalide",
+                    "validation_errors": errors
+                }), 400
+            
+            return jsonify({
+                "success": True,
+                "message": "Configuration validée avec succès",
+                "data": {
+                    "api_key_format": "valide",
+                    "model": model if model else "gpt-3.5-turbo"
+                }
+            })
+            
+        except Exception as e:
+            current_app.logger.error(f"Erreur validation config: {str(e)}")
+            return jsonify({
+                "success": False,
+                "error": str(e)
+            }), 500
 
 # Routes d'erreur personnalisées pour ce blueprint
 @main_bp.app_errorhandler(404)
