@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="{% block description %}{{ description or 'DevPlan AI Generator - Générateur de schémas full-stack alimenté par l\'IA' }}{% endblock %}">
     <meta name="author" content="DevPlan Team">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     
     <!-- Title -->
     <title>{% block title %}{{ title }} - {{ app_name }}{% endblock %}</title>
